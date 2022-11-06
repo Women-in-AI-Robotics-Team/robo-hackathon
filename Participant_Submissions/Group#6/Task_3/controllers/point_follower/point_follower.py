@@ -8,7 +8,7 @@ import math
 ## ------------------------------------------------------------------------
 #Edit point_follower and Sketch functions for Task 1, 2 , 3
 
-def point_follower(current,goal,time):
+def point_follower(current,goal,curve):
     # Implement a Controller to reach the goal.
 
     # current is [x,y,theta]
@@ -20,20 +20,13 @@ def point_follower(current,goal,time):
     # rightSpeed is a float
 
     # Controller code here to reach from "current" location to "goal" location. 
-    if (abs(current[2]-goal) > 0.1):
-            leftSpeed = -0.5
-            rightSpeed = 0.5
-            print("left")
-    else:
-        leftSpeed = 1.0 
-        rightSpeed = 1.0
-        print("yes")
-        time += 0.0005
+    leftSpeed = 4.82-curve 
+    rightSpeed = 5
         
     # leftSpeed = 9.629-curve
     # rightSpeed = 10.0
     # Sample velocities of 1.0 provided to make robot move straight by default. 
-    return leftSpeed,rightSpeed,time
+    return leftSpeed,rightSpeed
 
 def Sketch():
     # Use this function to calculate waypoints that can trace the given curve in the world. 
@@ -77,7 +70,7 @@ if __name__=="__main__":
     #Optional Edit here ------------------------------------------------------------
     #Call the Sketch function here if you want to generate vector of goals just once
     # ------------------------------------------------------------------------------
-    t=0
+    curve=0
     while robot.step(timestep) != -1:
 
         # Fetch current position of robot using GPS and IMU : x,y,theta
@@ -88,16 +81,14 @@ if __name__=="__main__":
         # t1 = math.sin(t)/10 + 1/10*t*math.cos(t)
         # t2 = 1/10*t*math.sin(t) - math.cos(t)/10
         # goal = math.atan(t1/t2) # initial goal to initialize goal array
-        goal = (-math.pi)*math.cos(t)
-        print(goal)
+        goal=[0,0,0]
         ## ------------------------------------------------------------------------------
         #Edit here 
         # Call the Sketch function here if you want to generate vector of goals continuously
         # Use point_follower controller to trace the curve using the above generated waypoints   
         # point_follower should return leftSpeed and rightSpeed 
-        leftSpeed,rightSpeed,time = point_follower(current, goal, t)
-        t=time
-        print(t)
+        leftSpeed,rightSpeed = point_follower(current, goal, curve)
+        curve += 0.000015
         ## ------------------------------------------------------------------------------
 
         # Setting velocities to each wheel based on calculation.
